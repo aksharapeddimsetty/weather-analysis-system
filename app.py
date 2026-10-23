@@ -4,209 +4,213 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# 🌟 Set clean layout configuration
+# 🌟 Professional Layout & Theme Setup
 st.set_page_config(
-    page_title="Weather Data Analysis System Pro",
+    page_title="Weather Analytics Portal",
     page_icon="🌦️",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
-# 🎨 Custom Premium Styling Injection
+# 🎨 Premium Custom CSS Injection for a "Grand Entry" Appearance
 st.markdown("""
     <style>
-    .main { background-color: #f8f9fa; }
-    h1 { color: #1e3a8a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 800; }
-    h2 { color: #1e40af; font-weight: 700; }
-    h3 { color: #0f172a; font-weight: 600; }
-    .welcome-card {
-        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-        color: white;
-        padding: 35px;
-        border-radius: 15px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    .main { background-color: #fdfefe; }
+    .grand-title {
+        color: #1e3a8a;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 42px;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+    .grand-subtitle {
+        color: #475569;
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 25px;
+        font-style: italic;
+    }
+    .team-badge {
+        background-color: #f1f5f9;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 5px solid #2563eb;
+        margin-bottom: 30px;
+    }
+    .step-box {
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
         margin-bottom: 25px;
     }
-    .stAlert p { font-size: 16px !important; font-weight: 500; }
-    .error-box {
-        background-color: #fef2f2;
-        border-left: 6px solid #dc2626;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 15px;
+    .step-header {
+        color: #0f172a;
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #cbd5e1;
+        padding-bottom: 5px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 🏛️ GRAND ENTRY WELCOME HERO BLOCK
+# 🚀 GRAND ENTRY HEADER ARCHITECTURE
+st.markdown("<div class='grand-title'>🌦️ Weather Data Analysis System Pro</div>", unsafe_allow_html=True)
+st.markdown("<div class='grand-subtitle'>Enterprise Preprocessing, Standardization & Trend Visualization Engine</div>", unsafe_allow_html=True)
+
+# Project Metadata Context Panel
 st.markdown("""
-    <div class="welcome-card">
-        <h1>🌦️ Weather Data Analysis System</h1>
-        <p style="font-size: 18px; alpha: 0.9;">Welcome to the production-grade weather cleaning, preprocessing, and analytical visualization workspace.</p>
-        <hr style="border-color: rgba(255,255,255,0.2);">
-        <p style="font-size: 14px; font-weight: bold;">🚀 Developed by Team Leads: V.SriHasini, P.Akshara, P.Nagadevi, S.Dhanasri</p>
-        <p style="font-size: 13px; alpha: 0.8;">Guided by: BHUSARAPU HEMA NAGAMANI, Assistant Professor</p>
-    </div>
+<div class='team-badge'>
+    <strong>🎓 Project Lead & Contributors:</strong> V.SriHasini (Lead), P.Akshara, P.Nagadevi, S.Dhanasri <br>
+    <strong>👨‍🏫 Project Guide:</strong> BHUSARAPU HEMA NAGAMANI, Assistant Professor
+</div>
 """, unsafe_allow_html=True)
 
-# --- SIDEBAR CONTROL PANEL ---
-st.sidebar.markdown("### ⚙️ System Controls")
-temperature_scale = st.sidebar.selectbox("Preferred Temperature Scale", ["Celsius (°C)", "Fahrenheit (°F)"])
-outlier_threshold = st.sidebar.slider("Maximum Temp Safety Guardrail (°C)", 40, 60, 50)
+# --- STEP 1: CLEAN UPLOAD PORTAL ---
+st.markdown("<div class='step-box'>", unsafe_allow_html=True)
+st.markdown("<div class='step-header'>📂 Step 1: Upload Raw Weather Dataset</div>", unsafe_allow_html=True)
 
-st.sidebar.divider()
-st.sidebar.markdown("### 📥 Step 1: Ingest Data")
-uploaded_file = st.sidebar.file_uploader("Upload your Weather Dataset (Excel or CSV format)", type=["xlsx", "csv", "xls"])
+uploaded_file = st.file_uploader("Please choose an Excel (.xlsx, .xls) or CSV (.csv) weather document to initialize the platform analytics pipeline:", type=["csv", "xlsx", "xls"])
 
-# --- CORE SYSTEM CORE ENGINE ---
+st.markdown("</div>", unsafe_allow_html=True)
+
+# Execute framework ONLY when a file is provided
 if uploaded_file is None:
-    # Beautiful default dynamic landing placeholder instructing the user what to do next
-    st.info("### 👋 Welcome! Let's get started by feeding data into the engine.")
-    st.markdown("""
-    To begin cleaning and analyzing your records, please upload your weather file using the sidebar panel on the left.
-    
-    📋 **Your dataset should ideally contain columns tracking:**
-    * **Dates** (e.g., 01-01-2024)
-    * **Temperature** values
-    * **Humidity** percentages
-    * **Wind Speed** values
-    * **Weather Conditions** (e.g., Sunny, Cloudy, Rainy)
-    """)
+    st.info("💡 Welcome! The system is clean and idling safely. Please drop or upload your data file above to trigger the analysis engine interfaces.")
 else:
-    # 🏃 Process starts immediately upon file upload
-    raw_df = None
+    # Safe File Ingestion Wrapper
     try:
         if uploaded_file.name.endswith('.csv'):
             raw_df = pd.read_csv(uploaded_file)
         else:
             raw_df = pd.read_excel(uploaded_file)
-    except Exception as e:
-        st.markdown(f"""
-        <div class="error-box">
-            <h3>❌ The uploaded file is corrupted or unreadable</h3>
-            <p>The processing framework cannot unpack the file structure.</p>
-            <p>💡 <b>How to fix this:</b> Open the document in your computer spreadsheet editor (Excel/Numbers), click 'Save As', choose standard <b>Excel Workbook (.xlsx)</b> or <b>CSV (.csv)</b>, and re-upload the new file here.</p>
-        </div>
-        """, unsafe_allow_html=True)
+    except Exception:
+        st.error("### ❌ Human Readable Notification: The document format is corrupted.")
+        st.markdown("💡 **Action Step:** Open the file on your local device using Excel, click 'Save As', select regular `.csv` or `.xlsx` format, and upload that newly saved copy.")
         st.stop()
 
-    # --- DATAFRAME UTILITY PRE-CHECK ---
-    if raw_df is not None:
-        st.markdown("## 🔍 Step 1: Intelligent Column Layout Mapping")
+    # Dynamic Raw Data Display Block
+    st.markdown("<div class='step-box'>", unsafe_allow_html=True)
+    st.markdown("<div class='step-header'>📋 Step 2: Ingested File Data Grid Preview</div>", unsafe_allow_html=True)
+    st.markdown("Here is a sample view of the columns and data rows discovered inside your uploaded document:")
+    st.dataframe(raw_df.head(10), use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # --- STEP 2: INTERACTIVE PIPELINE EXECUTION ---
+    st.markdown("<div class='step-box'>", unsafe_allow_html=True)
+    st.markdown("<div class='step-header'>⚙️ Step 3: Analytics Optimization Engine</div>", unsafe_allow_html=True)
+    st.markdown("Click the execution button below to parse, auto-clean anomalies, standardize scale units, and compile trend metrics.")
+    
+    # Render explicit interaction check to prevent sudden system loading states
+    trigger_analysis = st.button("🚀 Analyze & Generate Visualizations", use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    if trigger_analysis:
+        st.markdown("<div class='step-box'>", unsafe_allow_html=True)
+        st.markdown("<div class='step-header'>🧼 Step 4: Automated Pipeline Quality Optimization & Diagnostics</div>", unsafe_allow_html=True)
         
-        expected_keywords = {
-            'Date': ['date', 'time', 'timestamp', 'day'],
-            'Temperature': ['temp', 'temperature', 'celsius', '°c', 't'],
-            'Humidity': ['humidity', 'humid', 'moisture', '%'],
-            'Wind': ['wind', 'speed', 'km/h', 'velocity'],
-            'Condition': ['condition', 'weather', 'status', 'sky']
-        }
+        # Build processing layout securely
+        clean_df = raw_df.copy()
+        
+        # Track pipeline changes for user diagnostics
+        original_row_count = len(clean_df)
+        duplicate_count = clean_df.duplicated().sum()
+        
+        # Execute automated repairs
+        clean_df = clean_df.drop_duplicates()
+        
+        # Dynamically separate numerical data columns from categorical blocks safely
+        numeric_cols = clean_df.select_dtypes(include=[np.number]).columns.tolist()
+        text_cols = clean_df.select_dtypes(exclude=[np.number]).columns.tolist()
+        
+        repaired_cells = 0
+        for col in numeric_cols:
+            null_mask = clean_df[col].isnull()
+            null_count = null_mask.sum()
+            if null_count > 0:
+                col_mean = clean_df[col].mean() if not clean_df[col].isnull().all() else 0.0
+                clean_df[col] = clean_df[col].fillna(col_mean)
+                repaired_cells += null_count
 
-        mapped_columns = {}
-        cleaned_cols = [str(c).strip().lower() for c in raw_df.columns]
-        missing_fields = []
+        # Clear human diagnostic logging notes
+        st.success("✅ Operational pipelines completed smoothly with zero critical code breakdown exceptions!")
+        diag_c1, diag_c2, diag_c3 = st.columns(3)
+        with diag_c1:
+            st.metric("Total Records Ingested", original_row_count)
+        with diag_c2:
+            st.metric("Duplicate Entries Removed", int(duplicate_count))
+        with diag_c3:
+            st.metric("Missing Data Fields Restored", int(repaired_cells))
+            
+        # Automated Conversions Logic: Scan for any temperature field to calculate Fahrenheit alternatives safely
+        temp_col_found = None
+        for col in numeric_cols:
+            if 'temp' in col.lower() or '°c' in col.lower() or 'celsius' in col.lower():
+                temp_col_found = col
+                break
+                
+        if temp_col_found:
+            clean_df['Temperature (°F)'] = (clean_df[temp_col_found] * 9/5) + 32
+            st.info(f"✨ Custom Feature Engineering Active: Detected temperature source base '{temp_col_found}' and computed scaled mathematical conversions into 'Temperature (°F)' without overwriting your raw tracking data.")
+            
+        st.markdown("#### Standardized Processed Output Data Matrix Grid Layout")
+        st.dataframe(clean_df, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-        # Smart search map to match raw user header columns safely
-        for standard_name, variants in expected_keywords.items():
-            matched = None
-            for i, orig_col in enumerate(raw_df.columns):
-                if any(v in cleaned_cols[i] for v in variants):
-                    matched = orig_col
-                    break
-            if matched:
-                mapped_columns[standard_name] = matched
+        # --- STEP 3: VISUAL CHARTS INTERFACE ---
+        st.markdown("<div class='step-box'>", unsafe_allow_html=True)
+        st.markdown("<div class='step-header'>📊 Step 5: Production Analytics Data Dashboards</div>", unsafe_allow_html=True)
+        
+        chart_layout_col1, chart_layout_col2 = st.columns(2)
+        
+        with chart_layout_col1:
+            if temp_col_found:
+                st.markdown("📈 **Chronological Metric Trend Line Profiling**")
+                fig, ax = plt.subplots(figsize=(10, 5))
+                ax.plot(clean_df.index, clean_df[temp_col_found], marker='o', color='#2563eb', linewidth=2.5, linestyle='-')
+                ax.set_title(f"Sequential Evaluation Profile: {temp_col_found}", fontweight='bold', fontsize=12)
+                ax.set_xlabel("Observation Record Index Row Sequence")
+                ax.set_ylabel(temp_col_found)
+                ax.grid(True, linestyle=':', alpha=0.6)
+                sns.despine()
+                st.pyplot(fig)
             else:
-                missing_fields.append(standard_name)
+                st.info("ℹ️ Note: No text columns tracking Temperature patterns detected inside your document file properties to map visual trend charts.")
+                
+        with chart_layout_col2:
+            # Render a generic quantitative frequency profile map of numerical metrics automatically
+            if len(numeric_cols) > 0:
+                target_humidity_or_other = numeric_cols[-1]
+                st.markdown(f"📊 **Distribution Analytics: {target_humidity_or_other}**")
+                fig, ax = plt.subplots(figsize=(10, 5))
+                sns.histplot(data=clean_df, x=target_humidity_or_other, kde=True, color='#0d9488', ax=ax)
+                ax.set_title(f"Density Range Diagnostics: {target_humidity_or_other}", fontweight='bold', fontsize=12)
+                sns.despine()
+                st.pyplot(fig)
+            else:
+                st.info("ℹ️ Note: No clean numerical indices available to map summary distribution histograms.")
+                
+        # Categorical Tracking Charts Block
+        if len(text_cols) > 0:
+            target_txt_col = text_cols[0]
+            st.markdown(f"🗂️ **Categorical Volumetric Distributions: {target_txt_col}**")
+            fig, ax = plt.subplots(figsize=(12, 4))
+            sns.countplot(data=clean_df, x=target_txt_col, palette='Blues_r', ax=ax)
+            ax.set_title(f"Log Volume Frequencies Per Discovered State: {target_txt_col}", fontweight='bold')
+            plt.xticks(rotation=15)
+            sns.despine()
+            st.pyplot(fig)
+            
+        st.markdown("</div>", unsafe_allow_html=True)
 
-        # Intercept schema errors elegantly and show human steps
-        if missing_fields:
-            missing_text = ", ".join([f"<b>{field}</b>" for field in missing_fields])
-            st.markdown(f"""
-            <div class="error-box">
-                <h3>📋 Missing Essential Data Columns</h3>
-                <p>The system successfully read your file, but could not detect columns representing: {missing_text}.</p>
-                <p>💡 <b>How to fix this layout:</b> Ensure your file's header row contains clear names. For example, rename your temperature column header to 'Temperature', and your humidity column header to 'Humidity'. Save your file and upload it again.</p>
-            </div>
-            """, unsafe_allow_html=True)
-            st.stop()
-
-        # Build clean processing matrix frame safely
-        try:
-            process_df = pd.DataFrame()
-            process_df['Raw_Date'] = raw_df[mapped_columns['Date']]
-            process_df['Temp_C'] = pd.to_numeric(raw_df[mapped_columns['Temperature']], errors='coerce')
-            process_df['Humidity'] = pd.to_numeric(raw_df[mapped_columns['Humidity']], errors='coerce')
-            process_df['Wind_Speed'] = pd.to_numeric(raw_df[mapped_columns['Wind']], errors='coerce')
-            process_df['Condition'] = raw_df[mapped_columns['Condition']].astype(str).str.strip().str.capitalize()
-        except Exception as data_err:
-            st.markdown("""
-            <div class="error-box">
-                <h3>⚠️ Data Conversion Breakdown</h3>
-                <p>The system had trouble converting text values inside your numeric columns into real metrics.</p>
-                <p>💡 <b>How to fix this:</b> Make sure your Temperature, Humidity, and Wind columns only contain plain numbers. Remove any letters, symbols, or text labels inside those rows.</p>
-            </div>
-            """, unsafe_allow_html=True)
-            st.stop()
-
-        # --- STEP 3: AUTOMATED DATA CLEANING & REPAIR PIPELINE ---
-        st.markdown("## 🧼 Step 2: Automated Pipeline Repair & Metrics Sanitization")
-
-        orig_rows = len(process_df)
-        null_temps = process_df['Temp_C'].isnull().sum()
-        null_hum = process_df['Humidity'].isnull().sum()
-
-        # Execute dynamic statistical mean adjustments
-        mean_temp = process_df['Temp_C'].mean() if not process_df['Temp_C'].isnull().all() else 25.0
-        mean_hum = process_df['Humidity'].mean() if not process_df['Humidity'].isnull().all() else 70.0
-
-        process_df['Temp_C'] = process_df['Temp_C'].fillna(mean_temp)
-        process_df['Humidity'] = process_df['Humidity'].fillna(mean_hum)
-        process_df['Wind_Speed'] = process_df['Wind_Speed'].fillna(0.0)
-
-        # Identify environmental hardware sensor outlier values
-        outlier_mask = process_df['Temp_C'] > outlier_threshold
-        outlier_count = outlier_mask.sum()
-        if outlier_count > 0:
-            st.warning(f"⚠️ Anomaly Guardrail Triggered: Adjusted {outlier_count} extreme temperature spikes exceeding your safety threshold limit ({outlier_threshold}°C).")
-            process_df.loc[outlier_mask, 'Temp_C'] = mean_temp
-
-        # Clear duplicate rows
-        duplicate_rows = process_df.duplicated().sum()
-        process_df = process_df.drop_duplicates()
-
-        # Safe DateTime parser guardrail
-        process_df['Clean_Date'] = pd.to_datetime(process_df['Raw_Date'], errors='coerce')
-        invalid_dates = process_df['Clean_Date'].isnull().sum()
-        if invalid_dates > 0:
-            st.markdown(f"""
-            <div class="error-box">
-                <h3>📅 Invalid Date Format Detected</h3>
-                <p>The system found {invalid_dates} rows with unreadable calendar date formats.</p>
-                <p>💡 <b>How to fix this:</b> Ensure all dates in your date column use standard formats like <b>YYYY-MM-DD</b> or <b>DD-MM-YYYY</b>. Blanks or non-date text cannot be processed.</p>
-            </div>
-            """, unsafe_allow_html=True)
-            st.stop()
-
-        # Compute conversions
-        process_df['Temp_F'] = (process_df['Temp_C'] * 9/5) + 32
-
-        # Format and display dashboard output dataset grid layout
-        final_display_df = process_df[['Clean_Date', 'Temp_C', 'Temp_F', 'Humidity', 'Wind_Speed', 'Condition']].copy()
-        final_display_df.columns = ['Date', 'Temperature (°C)', 'Temperature (°F)', 'Humidity (%)', 'Wind Speed (km/h)', 'Weather Condition']
-
-        # Render Premium Scorecards
-        kpi1, kpi2, kpi3, kpi4 = st.columns(4)
-        with kpi1:
-            st.metric("Total Rows Processed", orig_rows)
-        with kpi2:
-            st.metric("Missing Values Imputed", int(null_temps + null_hum), delta="Fixed via Mean", delta_color="normal")
-        with kpi3:
-            st.metric("Duplicate Entries Removed", int(duplicate_rows))
-        with kpi4:
-            st.metric("Dataset Quality Health", f"{int((1 - (null_temps/orig_rows if orig_rows > 0 else 0))*100)}%")
-
-        st.dataframe(final_display_df, use_container_width=True)
-
-        # --- STEP 4: INTERACTIVE VISUAL ENGINE ---
-        st.markdown("## 📊 Step 3: Interactive Visual Insights Engine")
+        # --- STEP 4: DATA EXPORT PORTAL ---
+        st.markdown("<div class='step-box'>", unsafe_allow_html=True)
+        st.markdown("<div class='step-header'>💾 Step 6: Secure Data Persistence Pipeline Export</div>", unsafe_allow_html=True)
         
+        csv_export_bytes = clean_df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="📥 Download Cleanized System Production File (final_weather_analytics.csv)",
+            data=csv_export_bytes,
+
