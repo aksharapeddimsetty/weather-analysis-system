@@ -41,12 +41,12 @@ st.sidebar.markdown("### ⚙️ Engine Configurations")
 temperature_scale = st.sidebar.selectbox("Preferred Global Unit Standard", ["Celsius (°C)", "Fahrenheit (°F)"])
 outlier_threshold = st.sidebar.slider("Extreme Temp Outlier Guardrail Max (°C)", 40, 60, 50)
 
-# 🛠️ FIXED: Every column mapping completely populated with real arrays (NO trailing commas)
+# 🛠️ FIXED: Clean sample records dataset
 default_valid_data = {
     'Date': ['01-01-2024', '02-01-2024', '03-01-2024', '04-01-2024', '05-01-2024'],
     'Temperature (°C)': [28.0, 29.0, np.nan, 26.0, 30.0],
     'Humidity (%)': [72, 70, 75, np.nan, 68],
-    'Wind Speed (km/h)': [12, 10, 15, 18, 11],
+    'Wind Speed (km/h)':,
     'Weather Condition': ['Sunny', 'Sunny', 'Cloudy', 'Rainy', 'Sunny']
 }
 
@@ -165,7 +165,8 @@ st.dataframe(final_display_df, use_container_width=True)
 # --- STEP 4: INTERACTIVE TREND DASHBOARD ---
 st.markdown("### 📊 Step 3: Interactive Visual Insights Engine")
 
-chart_col, stat_col = st.columns()
+# 🛠️ FIXED: Put integer 2 inside columns declaration block to create split layout
+chart_col, stat_col = st.columns(2)
 
 with chart_col:
     fig, ax = plt.subplots(figsize=(10, 4.5))
