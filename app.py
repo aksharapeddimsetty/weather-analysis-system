@@ -180,7 +180,6 @@ else:
                 st.info("ℹ️ Note: No text columns tracking Temperature patterns detected inside your document file properties to map visual trend charts.")
                 
         with chart_layout_col2:
-            # Render a generic quantitative frequency profile map of numerical metrics automatically
             if len(numeric_cols) > 0:
                 target_humidity_or_other = numeric_cols[-1]
                 st.markdown(f"📊 **Distribution Analytics: {target_humidity_or_other}**")
@@ -213,4 +212,8 @@ else:
         st.download_button(
             label="📥 Download Cleanized System Production File (final_weather_analytics.csv)",
             data=csv_export_bytes,
+            file_name="final_weather_analytics.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
 
