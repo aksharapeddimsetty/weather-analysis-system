@@ -12,205 +12,201 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# 🎨 Custom Corporate Styling Injection
+# 🎨 Custom Premium Styling Injection
 st.markdown("""
     <style>
     .main { background-color: #f8f9fa; }
-    h1 { color: #1e3a8a; font-family: 'Helvetica Neue', sans-serif; font-weight: 700; }
+    h1 { color: #1e3a8a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 800; }
+    h2 { color: #1e40af; font-weight: 700; }
     h3 { color: #0f172a; font-weight: 600; }
-    .stAlert p { font-size: 15px !important; font-weight: 500; }
-    .metric-card {
-        background-color: white;
+    .welcome-card {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        color: white;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 25px;
+    }
+    .stAlert p { font-size: 16px !important; font-weight: 500; }
+    .error-box {
+        background-color: #fef2f2;
+        border-left: 6px solid #dc2626;
         padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        border-left: 5px solid #3b82f6;
+        border-radius: 8px;
+        margin-top: 15px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# App Header
-st.title("🌦️ Weather Data Analysis System — Professional Edition")
-st.markdown("🔒 *Production-Grade Pipeline Engine with Human-Centric Error Diagnostic Routing*")
-st.caption("🚀 Developed by Team: V.SriHasini, P.Akshara, P.Nagadevi, S.Dhanasri | Project Guide: BHUSARAPU HEMA NAGAMANI")
+# 🏛️ GRAND ENTRY WELCOME HERO BLOCK
+st.markdown("""
+    <div class="welcome-card">
+        <h1>🌦️ Weather Data Analysis System</h1>
+        <p style="font-size: 18px; alpha: 0.9;">Welcome to the production-grade weather cleaning, preprocessing, and analytical visualization workspace.</p>
+        <hr style="border-color: rgba(255,255,255,0.2);">
+        <p style="font-size: 14px; font-weight: bold;">🚀 Developed by Team Leads: V.SriHasini, P.Akshara, P.Nagadevi, S.Dhanasri</p>
+        <p style="font-size: 13px; alpha: 0.8;">Guided by: BHUSARAPU HEMA NAGAMANI, Assistant Professor</p>
+    </div>
+""", unsafe_allow_html=True)
 
-st.divider()
+# --- SIDEBAR CONTROL PANEL ---
+st.sidebar.markdown("### ⚙️ System Controls")
+temperature_scale = st.sidebar.selectbox("Preferred Temperature Scale", ["Celsius (°C)", "Fahrenheit (°F)"])
+outlier_threshold = st.sidebar.slider("Maximum Temp Safety Guardrail (°C)", 40, 60, 50)
 
-# --- SIDEBAR ENGINE CONTROLS ---
-st.sidebar.markdown("### ⚙️ Engine Configurations")
-temperature_scale = st.sidebar.selectbox("Preferred Global Unit Standard", ["Celsius (°C)", "Fahrenheit (°F)"])
-outlier_threshold = st.sidebar.slider("Extreme Temp Outlier Guardrail Max (°C)", 40, 60, 50)
+st.sidebar.divider()
+st.sidebar.markdown("### 📥 Step 1: Ingest Data")
+uploaded_file = st.sidebar.file_uploader("Upload your Weather Dataset (Excel or CSV format)", type=["xlsx", "csv", "xls"])
 
-# 🛠️ FIXED: Clean sample records dataset
-default_valid_data = {
-    'Date': ['01-01-2024', '02-01-2024', '03-01-2024', '04-01-2024', '05-01-2024'],
-    'Temperature (°C)': [28.0, 29.0, np.nan, 26.0, 30.0],
-    'Humidity (%)': [72, 70, 75, np.nan, 68],
-    'Wind Speed (km/h)':,
-    'Weather Condition': ['Sunny', 'Sunny', 'Cloudy', 'Rainy', 'Sunny']
-}
-
-uploaded_file = st.sidebar.file_uploader("📥 Upload Weather Dataset (Excel or CSV)", type=["xlsx", "csv", "xls"])
-
-raw_df = None
-
-# --- STEP 1: RESILIENT DATA INGEST ENGINE ---
-if uploaded_file is not None:
+# --- CORE SYSTEM CORE ENGINE ---
+if uploaded_file is None:
+    # Beautiful default dynamic landing placeholder instructing the user what to do next
+    st.info("### 👋 Welcome! Let's get started by feeding data into the engine.")
+    st.markdown("""
+    To begin cleaning and analyzing your records, please upload your weather file using the sidebar panel on the left.
+    
+    📋 **Your dataset should ideally contain columns tracking:**
+    * **Dates** (e.g., 01-01-2024)
+    * **Temperature** values
+    * **Humidity** percentages
+    * **Wind Speed** values
+    * **Weather Conditions** (e.g., Sunny, Cloudy, Rainy)
+    """)
+else:
+    # 🏃 Process starts immediately upon file upload
+    raw_df = None
     try:
         if uploaded_file.name.endswith('.csv'):
             raw_df = pd.read_csv(uploaded_file)
         else:
             raw_df = pd.read_excel(uploaded_file)
-        st.sidebar.success("✅ File loaded to RAM successfully.")
     except Exception as e:
-        st.error("### ❌ Human Readable Error: The uploaded file is structurally corrupted.")
-        st.info("💡 **How to fix this:** Open the spreadsheet application on your computer, resave the sheet cleanly as a standard `.csv` or `.xlsx` workbook, and upload it again.")
-        st.stop()
-else:
-    raw_df = pd.DataFrame(default_valid_data)
-    st.sidebar.info("💡 Running safely on built-in project system data.")
-
-# --- STEP 2: HUMAN-CENTRIC SCHEMA ARCHITECTURE VALIDATION ---
-st.markdown("### 🔍 Step 1: Intelligent Column-Mapping Engine")
-
-expected_keywords = {
-    'Date': ['date', 'time', 'timestamp', 'day'],
-    'Temperature': ['temp', 'temperature', 'celsius', '°c', 't'],
-    'Humidity': ['humidity', 'humid', 'moisture', '%'],
-    'Wind': ['wind', 'speed', 'km/h', 'velocity'],
-    'Condition': ['condition', 'weather', 'status', 'sky']
-}
-
-mapped_columns = {}
-cleaned_cols = [str(c).strip().lower() for c in raw_df.columns]
-
-for standard_name, variants in expected_keywords.items():
-    matched = None
-    for i, orig_col in enumerate(raw_df.columns):
-        if any(v in cleaned_cols[i] for v in variants):
-            matched = orig_col
-            break
-    if matched:
-        mapped_columns[standard_name] = matched
-    else:
-        st.error(f"### ❌ Human Readable Error: Missing Essential Data Column for '{standard_name}'")
         st.markdown(f"""
-        The processing framework checked your file but could not find a column representing **{standard_name}**.
-        
-        💡 **Actionable Steps to fix this:**
-        1. Open your data file in Microsoft Excel or Google Sheets.
-        2. Ensure one of your column headers contains the word: `{standard_name}`.
-        3. Save the spreadsheet changes and upload your data document again.
-        """)
+        <div class="error-box">
+            <h3>❌ The uploaded file is corrupted or unreadable</h3>
+            <p>The processing framework cannot unpack the file structure.</p>
+            <p>💡 <b>How to fix this:</b> Open the document in your computer spreadsheet editor (Excel/Numbers), click 'Save As', choose standard <b>Excel Workbook (.xlsx)</b> or <b>CSV (.csv)</b>, and re-upload the new file here.</p>
+        </div>
+        """, unsafe_allow_html=True)
         st.stop()
 
-# Build standardized dataframe mapping structure
-process_df = pd.DataFrame()
-process_df['Raw_Date'] = raw_df[mapped_columns['Date']]
-process_df['Temp_C'] = pd.to_numeric(raw_df[mapped_columns['Temperature']], errors='coerce')
-process_df['Humidity'] = pd.to_numeric(raw_df[mapped_columns['Humidity']], errors='coerce')
-process_df['Wind_Speed'] = pd.to_numeric(raw_df[mapped_columns['Wind']], errors='coerce')
-process_df['Condition'] = raw_df[mapped_columns['Condition']].astype(str).str.strip().str.capitalize()
+    # --- DATAFRAME UTILITY PRE-CHECK ---
+    if raw_df is not None:
+        st.markdown("## 🔍 Step 1: Intelligent Column Layout Mapping")
+        
+        expected_keywords = {
+            'Date': ['date', 'time', 'timestamp', 'day'],
+            'Temperature': ['temp', 'temperature', 'celsius', '°c', 't'],
+            'Humidity': ['humidity', 'humid', 'moisture', '%'],
+            'Wind': ['wind', 'speed', 'km/h', 'velocity'],
+            'Condition': ['condition', 'weather', 'status', 'sky']
+        }
 
-# --- STEP 3: AUTOMATED PIPELINE REPAIR & SANITIZATION ---
-st.markdown("### 🧼 Step 2: Live Data Health Diagnostics & Repair")
+        mapped_columns = {}
+        cleaned_cols = [str(c).strip().lower() for c in raw_df.columns]
+        missing_fields = []
 
-orig_rows = len(process_df)
-null_temps = process_df['Temp_C'].isnull().sum()
-null_hum = process_df['Humidity'].isnull().sum()
+        # Smart search map to match raw user header columns safely
+        for standard_name, variants in expected_keywords.items():
+            matched = None
+            for i, orig_col in enumerate(raw_df.columns):
+                if any(v in cleaned_cols[i] for v in variants):
+                    matched = orig_col
+                    break
+            if matched:
+                mapped_columns[standard_name] = matched
+            else:
+                missing_fields.append(standard_name)
 
-mean_temp = process_df['Temp_C'].mean() if not process_df['Temp_C'].isnull().all() else 25.0
-mean_hum = process_df['Humidity'].mean() if not process_df['Humidity'].isnull().all() else 70.0
+        # Intercept schema errors elegantly and show human steps
+        if missing_fields:
+            missing_text = ", ".join([f"<b>{field}</b>" for field in missing_fields])
+            st.markdown(f"""
+            <div class="error-box">
+                <h3>📋 Missing Essential Data Columns</h3>
+                <p>The system successfully read your file, but could not detect columns representing: {missing_text}.</p>
+                <p>💡 <b>How to fix this layout:</b> Ensure your file's header row contains clear names. For example, rename your temperature column header to 'Temperature', and your humidity column header to 'Humidity'. Save your file and upload it again.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.stop()
 
-process_df['Temp_C'] = process_df['Temp_C'].fillna(mean_temp)
-process_df['Humidity'] = process_df['Humidity'].fillna(mean_hum)
-process_df['Wind_Speed'] = process_df['Wind_Speed'].fillna(0.0)
+        # Build clean processing matrix frame safely
+        try:
+            process_df = pd.DataFrame()
+            process_df['Raw_Date'] = raw_df[mapped_columns['Date']]
+            process_df['Temp_C'] = pd.to_numeric(raw_df[mapped_columns['Temperature']], errors='coerce')
+            process_df['Humidity'] = pd.to_numeric(raw_df[mapped_columns['Humidity']], errors='coerce')
+            process_df['Wind_Speed'] = pd.to_numeric(raw_df[mapped_columns['Wind']], errors='coerce')
+            process_df['Condition'] = raw_df[mapped_columns['Condition']].astype(str).str.strip().str.capitalize()
+        except Exception as data_err:
+            st.markdown("""
+            <div class="error-box">
+                <h3>⚠️ Data Conversion Breakdown</h3>
+                <p>The system had trouble converting text values inside your numeric columns into real metrics.</p>
+                <p>💡 <b>How to fix this:</b> Make sure your Temperature, Humidity, and Wind columns only contain plain numbers. Remove any letters, symbols, or text labels inside those rows.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.stop()
 
-# Safeguard against extreme outliers
-outlier_mask = process_df['Temp_C'] > outlier_threshold
-outlier_count = outlier_mask.sum()
-if outlier_count > 0:
-    st.warning(f"⚠️ **Anomaly Alert:** Intercepted {outlier_count} records exceeding your safe system limit threshold ({outlier_threshold}°C). These values were normalized automatically to preserve statistical safety metrics.")
-    process_df.loc[outlier_mask, 'Temp_C'] = mean_temp
+        # --- STEP 3: AUTOMATED DATA CLEANING & REPAIR PIPELINE ---
+        st.markdown("## 🧼 Step 2: Automated Pipeline Repair & Metrics Sanitization")
 
-duplicate_rows = process_df.duplicated().sum()
-process_df = process_df.drop_duplicates()
+        orig_rows = len(process_df)
+        null_temps = process_df['Temp_C'].isnull().sum()
+        null_hum = process_df['Humidity'].isnull().sum()
 
-process_df['Clean_Date'] = pd.to_datetime(process_df['Raw_Date'], errors='coerce')
-invalid_dates = process_df['Clean_Date'].isnull().sum()
-if invalid_dates > 0:
-    st.error(f"### ❌ Human Readable Error: System detected {invalid_dates} invalid calendar formats.")
-    st.markdown("""
-    💡 **Actionable Step:** Ensure all text values inside your Date column look like standard formats such as `YYYY-MM-DD` or `DD-MM-YYYY`. Empty text rows cannot be processed.
-    """)
-    st.stop()
+        # Execute dynamic statistical mean adjustments
+        mean_temp = process_df['Temp_C'].mean() if not process_df['Temp_C'].isnull().all() else 25.0
+        mean_hum = process_df['Humidity'].mean() if not process_df['Humidity'].isnull().all() else 70.0
 
-process_df['Temp_F'] = (process_df['Temp_C'] * 9/5) + 32
+        process_df['Temp_C'] = process_df['Temp_C'].fillna(mean_temp)
+        process_df['Humidity'] = process_df['Humidity'].fillna(mean_hum)
+        process_df['Wind_Speed'] = process_df['Wind_Speed'].fillna(0.0)
 
-final_display_df = process_df[['Clean_Date', 'Temp_C', 'Temp_F', 'Humidity', 'Wind_Speed', 'Condition']].copy()
-final_display_df.columns = ['Date Tracking', 'Temperature (°C)', 'Temperature (°F)', 'Air Moisture (%)', 'Wind Velocity (km/h)', 'Atmosphere Condition']
+        # Identify environmental hardware sensor outlier values
+        outlier_mask = process_df['Temp_C'] > outlier_threshold
+        outlier_count = outlier_mask.sum()
+        if outlier_count > 0:
+            st.warning(f"⚠️ Anomaly Guardrail Triggered: Adjusted {outlier_count} extreme temperature spikes exceeding your safety threshold limit ({outlier_threshold}°C).")
+            process_df.loc[outlier_mask, 'Temp_C'] = mean_temp
 
-kpi1, kpi2, kpi3, kpi4 = st.columns(4)
-with kpi1:
-    st.metric("System Rows Ingested", orig_rows)
-with kpi2:
-    st.metric("Missing Temperatures Repaired", int(null_temps), delta="Auto Imputed", delta_color="off")
-with kpi3:
-    st.metric("Duplicate Overlaps Dropped", int(duplicate_rows))
-with kpi4:
-    st.metric("Data Quality Score", f"{int((1 - (null_temps/orig_rows if orig_rows > 0 else 0))*100)}%")
+        # Clear duplicate rows
+        duplicate_rows = process_df.duplicated().sum()
+        process_df = process_df.drop_duplicates()
 
-st.dataframe(final_display_df, use_container_width=True)
+        # Safe DateTime parser guardrail
+        process_df['Clean_Date'] = pd.to_datetime(process_df['Raw_Date'], errors='coerce')
+        invalid_dates = process_df['Clean_Date'].isnull().sum()
+        if invalid_dates > 0:
+            st.markdown(f"""
+            <div class="error-box">
+                <h3>📅 Invalid Date Format Detected</h3>
+                <p>The system found {invalid_dates} rows with unreadable calendar date formats.</p>
+                <p>💡 <b>How to fix this:</b> Ensure all dates in your date column use standard formats like <b>YYYY-MM-DD</b> or <b>DD-MM-YYYY</b>. Blanks or non-date text cannot be processed.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            st.stop()
 
-# --- STEP 4: INTERACTIVE TREND DASHBOARD ---
-st.markdown("### 📊 Step 3: Interactive Visual Insights Engine")
+        # Compute conversions
+        process_df['Temp_F'] = (process_df['Temp_C'] * 9/5) + 32
 
-# 🛠️ FIXED: Put integer 2 inside columns declaration block to create split layout
-chart_col, stat_col = st.columns(2)
+        # Format and display dashboard output dataset grid layout
+        final_display_df = process_df[['Clean_Date', 'Temp_C', 'Temp_F', 'Humidity', 'Wind_Speed', 'Condition']].copy()
+        final_display_df.columns = ['Date', 'Temperature (°C)', 'Temperature (°F)', 'Humidity (%)', 'Wind Speed (km/h)', 'Weather Condition']
 
-with chart_col:
-    fig, ax = plt.subplots(figsize=(10, 4.5))
-    df_sorted = final_display_df.sort_values('Date Tracking')
-    y_metric = 'Temperature (°C)' if temperature_scale == "Celsius (°C)" else 'Temperature (°F)'
-    
-    ax.plot(df_sorted['Date Tracking'].dt.strftime('%b %d'), df_sorted[y_metric], 
-            marker='o', color='#2563eb', linestyle='-', linewidth=2.5, label=temperature_scale)
-    
-    ax.set_title("Chronological Temperature Evolution Profile", fontsize=12, fontweight='bold', pad=15)
-    ax.set_ylabel(y_metric, fontweight='semibold')
-    ax.set_xlabel("Time Axis Timeline", fontweight='semibold')
-    ax.grid(True, linestyle=':', alpha=0.6, color='#cbd5e1')
-    plt.xticks(rotation=30)
-    sns.despine()
-    st.pyplot(fig)
+        # Render Premium Scorecards
+        kpi1, kpi2, kpi3, kpi4 = st.columns(4)
+        with kpi1:
+            st.metric("Total Rows Processed", orig_rows)
+        with kpi2:
+            st.metric("Missing Values Imputed", int(null_temps + null_hum), delta="Fixed via Mean", delta_color="normal")
+        with kpi3:
+            st.metric("Duplicate Entries Removed", int(duplicate_rows))
+        with kpi4:
+            st.metric("Dataset Quality Health", f"{int((1 - (null_temps/orig_rows if orig_rows > 0 else 0))*100)}%")
 
-with stat_col:
-    st.markdown("🔬 **Mathematical Descriptive Analytics**")
-    st.dataframe(final_display_df.describe().T[['mean', 'min', 'max', 'std']], use_container_width=True)
+        st.dataframe(final_display_df, use_container_width=True)
 
-dist1, dist2 = st.columns(2)
-with dist1:
-    fig, ax = plt.subplots(figsize=(6, 3.5))
-    sns.countplot(data=final_display_df, x='Atmosphere Condition', palette='Blues_r', ax=ax)
-    ax.set_title("Volume Distribution of Sky Class Profiles", fontweight='bold')
-    sns.despine()
-    st.pyplot(fig)
-
-with dist2:
-    fig, ax = plt.subplots(figsize=(6, 3.5))
-    sns.histplot(data=final_display_df, x='Air Moisture (%)', kde=True, color='#0d9488', ax=ax)
-    ax.set_title("Air Humidity Moisture Analytics Profile", fontweight='bold')
-    sns.despine()
-    st.pyplot(fig)
-
-# --- STEP 5: ENTERPRISE DATA PERSISTENCE ---
-st.markdown("### 💾 Step 4: Secure Data Persistence Engine")
-csv_buffer = final_display_df.to_csv(index=False).encode('utf-8')
-
-st.download_button(
-    label="📥 Download Cleanized System Production File (final_weather_analytics.csv)",
-    data=csv_buffer,
-    file_name="final_weather_analytics.csv",
-    mime="text/csv"
-)
-st.success("✨ Secure operational data pipeline validated. System is structured cleanly without any background process runtime trace exceptions.")
+        # --- STEP 4: INTERACTIVE VISUAL ENGINE ---
+        st.markdown("## 📊 Step 3: Interactive Visual Insights Engine")
+        
