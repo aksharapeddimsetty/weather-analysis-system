@@ -4,9 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# 🌟 Professional Layout & Theme Setup
+# 🌟 Set clean layout configuration
 st.set_page_config(
-    page_title="Weather Analytics Portal",
+    page_title="Weather Data Analysis System Pro",
     page_icon="🌦️",
     layout="wide"
 )
@@ -76,7 +76,7 @@ uploaded_file = st.file_uploader("Please choose an Excel (.xlsx, .xls) or CSV (.
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Execute framework ONLY when a file is provided
+# Execute framework ONLY when a file is provided by the user
 if uploaded_file is None:
     st.info("💡 Welcome! The system is clean and idling safely. Please drop or upload your data file above to trigger the analysis engine interfaces.")
 else:
@@ -98,12 +98,12 @@ else:
     st.dataframe(raw_df.head(10), use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
-    # --- STEP 2: INTERACTIVE PIPELINE EXECUTION ---
+    # --- STEP 2: INTERACTIVE PIPELINE EXECUTION BUTTON ---
     st.markdown("<div class='step-box'>", unsafe_allow_html=True)
     st.markdown("<div class='step-header'>⚙️ Step 3: Analytics Optimization Engine</div>", unsafe_allow_html=True)
     st.markdown("Click the execution button below to parse, auto-clean anomalies, standardize scale units, and compile trend metrics.")
     
-    # Render explicit interaction check to prevent sudden system loading states
+    # User must explicitly click this button to show the next steps
     trigger_analysis = st.button("🚀 Analyze & Generate Visualizations", use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -134,8 +134,9 @@ else:
                 clean_df[col] = clean_df[col].fillna(col_mean)
                 repaired_cells += null_count
 
-        # Clear human diagnostic logging notes
+        # Display performance logs
         st.success("✅ Operational pipelines completed smoothly with zero critical code breakdown exceptions!")
+        
         diag_c1, diag_c2, diag_c3 = st.columns(3)
         with diag_c1:
             st.metric("Total Records Ingested", original_row_count)
@@ -153,7 +154,7 @@ else:
                 
         if temp_col_found:
             clean_df['Temperature (°F)'] = (clean_df[temp_col_found] * 9/5) + 32
-            st.info(f"✨ Custom Feature Engineering Active: Detected temperature source base '{temp_col_found}' and computed scaled mathematical conversions into 'Temperature (°F)' without overwriting your raw tracking data.")
+            st.info(f"✨ Custom Feature Engineering Active: Detected temperature source column '{temp_col_found}' and computed scaled mathematical conversions into 'Temperature (°F)' safely.")
             
         st.markdown("#### Standardized Processed Output Data Matrix Grid Layout")
         st.dataframe(clean_df, use_container_width=True)
@@ -177,28 +178,28 @@ else:
                 sns.despine()
                 st.pyplot(fig)
             else:
-                st.info("ℹ️ Note: No text columns tracking Temperature patterns detected inside your document file properties to map visual trend charts.")
+                st.info("ℹ️ Note: No specific temperature tracking column detected to map visual line charts.")
                 
         with chart_layout_col2:
             if len(numeric_cols) > 0:
-                target_humidity_or_other = numeric_cols[-1]
-                st.markdown(f"📊 **Distribution Analytics: {target_humidity_or_other}**")
+                target_dist_col = numeric_cols[-1]
+                st.markdown(f"📊 **Distribution Analytics: {target_dist_col}**")
                 fig, ax = plt.subplots(figsize=(10, 5))
-                sns.histplot(data=clean_df, x=target_humidity_or_other, kde=True, color='#0d9488', ax=ax)
-                ax.set_title(f"Density Range Diagnostics: {target_humidity_or_other}", fontweight='bold', fontsize=12)
+                sns.histplot(data=clean_df, x=target_dist_col, kde=True, color='#0d9488', ax=ax)
+                ax.set_title(f"Density Range Diagnostics: {target_dist_col}", fontweight='bold', fontsize=12)
                 sns.despine()
                 st.pyplot(fig)
             else:
-                st.info("ℹ️ Note: No clean numerical indices available to map summary distribution histograms.")
+                st.info("ℹ️ Note: No numerical fields available to map distribution histograms.")
                 
-        # Categorical Tracking Charts Block
+        # Categorical Volume Block
         if len(text_cols) > 0:
+            st.divider()
             target_txt_col = text_cols[0]
             st.markdown(f"🗂️ **Categorical Volumetric Distributions: {target_txt_col}**")
             fig, ax = plt.subplots(figsize=(12, 4))
             sns.countplot(data=clean_df, x=target_txt_col, palette='Blues_r', ax=ax)
             ax.set_title(f"Log Volume Frequencies Per Discovered State: {target_txt_col}", fontweight='bold')
-            plt.xticks(rotation=15)
             sns.despine()
             st.pyplot(fig)
             
@@ -216,4 +217,5 @@ else:
             mime="text/csv",
             use_container_width=True
         )
+        st.markdown("</div>", unsafe_allow_html=True)
 
