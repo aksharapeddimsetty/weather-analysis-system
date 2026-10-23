@@ -29,6 +29,14 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+# Generate the 10 sample records from your project sheet automatically if no file uploaded
+default_data = {
+    'Date': ['01-01-2024', '02-01-2024', '03-01-2024', '04-01-2024', '05-01-2024'],
+    'Temperature (°C)': [28.0, 29.0, np.nan, 26.0, 30.0], 
+    'Humidity (%)': [72, 70, 75, np.nan, 68],
+    'Wind Speed (km/h)':,
+    'Weather Condition': ['Sunny', 'Sunny', 'Cloudy', 'Rainy', 'Sunny']
+}
 
 # App Header
 st.title("🌦️ Weather Data Analysis System — Professional Edition")
