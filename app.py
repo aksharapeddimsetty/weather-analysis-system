@@ -41,12 +41,12 @@ st.sidebar.markdown("### ⚙️ Engine Configurations")
 temperature_scale = st.sidebar.selectbox("Preferred Global Unit Standard", ["Celsius (°C)", "Fahrenheit (°F)"])
 outlier_threshold = st.sidebar.slider("Extreme Temp Outlier Guardrail Max (°C)", 40, 60, 50)
 
-# 🛠️ FIXED: Fully populated dictionary dataset block with actual valid numerical lists
+# 🛠️ FIXED: Every column mapping completely populated with real arrays (NO trailing commas)
 default_valid_data = {
     'Date': ['01-01-2024', '02-01-2024', '03-01-2024', '04-01-2024', '05-01-2024'],
     'Temperature (°C)': [28.0, 29.0, np.nan, 26.0, 30.0],
     'Humidity (%)': [72, 70, 75, np.nan, 68],
-    'Wind Speed (km/h)':,
+    'Wind Speed (km/h)': [12, 10, 15, 18, 11],
     'Weather Condition': ['Sunny', 'Sunny', 'Cloudy', 'Rainy', 'Sunny']
 }
 
@@ -73,7 +73,6 @@ else:
 # --- STEP 2: HUMAN-CENTRIC SCHEMA ARCHITECTURE VALIDATION ---
 st.markdown("### 🔍 Step 1: Intelligent Column-Mapping Engine")
 
-# Define target columns expected by downstream visualization logic
 expected_keywords = {
     'Date': ['date', 'time', 'timestamp', 'day'],
     'Temperature': ['temp', 'temperature', 'celsius', '°c', 't'],
@@ -85,7 +84,6 @@ expected_keywords = {
 mapped_columns = {}
 cleaned_cols = [str(c).strip().lower() for c in raw_df.columns]
 
-# Loop through properties to automatically map mismatched column headings safely
 for standard_name, variants in expected_keywords.items():
     matched = None
     for i, orig_col in enumerate(raw_df.columns):
@@ -106,7 +104,7 @@ for standard_name, variants in expected_keywords.items():
         """)
         st.stop()
 
-# Build standardized clean execution DataFrame structure
+# Build standardized dataframe mapping structure
 process_df = pd.DataFrame()
 process_df['Raw_Date'] = raw_df[mapped_columns['Date']]
 process_df['Temp_C'] = pd.to_numeric(raw_df[mapped_columns['Temperature']], errors='coerce')
@@ -117,12 +115,10 @@ process_df['Condition'] = raw_df[mapped_columns['Condition']].astype(str).str.st
 # --- STEP 3: AUTOMATED PIPELINE REPAIR & SANITIZATION ---
 st.markdown("### 🧼 Step 2: Live Data Health Diagnostics & Repair")
 
-# Capture original shapes for dynamic KPI status summary blocks
 orig_rows = len(process_df)
 null_temps = process_df['Temp_C'].isnull().sum()
 null_hum = process_df['Humidity'].isnull().sum()
 
-# Execute robust statistical imputations (Mean fill repair logic)
 mean_temp = process_df['Temp_C'].mean() if not process_df['Temp_C'].isnull().all() else 25.0
 mean_hum = process_df['Humidity'].mean() if not process_df['Humidity'].isnull().all() else 70.0
 
@@ -137,11 +133,9 @@ if outlier_count > 0:
     st.warning(f"⚠️ **Anomaly Alert:** Intercepted {outlier_count} records exceeding your safe system limit threshold ({outlier_threshold}°C). These values were normalized automatically to preserve statistical safety metrics.")
     process_df.loc[outlier_mask, 'Temp_C'] = mean_temp
 
-# Drop complete duplicate entries
 duplicate_rows = process_df.duplicated().sum()
 process_df = process_df.drop_duplicates()
 
-# Safe Datetime Parsing wrapper engine
 process_df['Clean_Date'] = pd.to_datetime(process_df['Raw_Date'], errors='coerce')
 invalid_dates = process_df['Clean_Date'].isnull().sum()
 if invalid_dates > 0:
@@ -151,14 +145,11 @@ if invalid_dates > 0:
     """)
     st.stop()
 
-# Feature Engineering: Add Fahrenheit values cleanly in standard column
 process_df['Temp_F'] = (process_df['Temp_C'] * 9/5) + 32
 
-# Drop internal raw processing fields before displaying grid to users
 final_display_df = process_df[['Clean_Date', 'Temp_C', 'Temp_F', 'Humidity', 'Wind_Speed', 'Condition']].copy()
 final_display_df.columns = ['Date Tracking', 'Temperature (°C)', 'Temperature (°F)', 'Air Moisture (%)', 'Wind Velocity (km/h)', 'Atmosphere Condition']
 
-# Display Gorgeous Visual KPI Dashboard Metrics Cards
 kpi1, kpi2, kpi3, kpi4 = st.columns(4)
 with kpi1:
     st.metric("System Rows Ingested", orig_rows)
@@ -179,7 +170,6 @@ chart_col, stat_col = st.columns()
 with chart_col:
     fig, ax = plt.subplots(figsize=(10, 4.5))
     df_sorted = final_display_df.sort_values('Date Tracking')
-    
     y_metric = 'Temperature (°C)' if temperature_scale == "Celsius (°C)" else 'Temperature (°F)'
     
     ax.plot(df_sorted['Date Tracking'].dt.strftime('%b %d'), df_sorted[y_metric], 
@@ -212,7 +202,7 @@ with dist2:
     sns.despine()
     st.pyplot(fig)
 
-# --- STEP 5: ENTERPRISE PERMANENT DATA PERSISTENCE ---
+# --- STEP 5: ENTERPRISE DATA PERSISTENCE ---
 st.markdown("### 💾 Step 4: Secure Data Persistence Engine")
 csv_buffer = final_display_df.to_csv(index=False).encode('utf-8')
 
